@@ -1,7 +1,57 @@
+<!DOCTYPE HTML>
 <html>
+
 <head>
-<meta http-equiv="Refresh" content="0; URL=/cardvisitAR/">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="/script/api.js"></script>
+    <link rel="stylesheet" href="style.css">
+    <script>
+        var earth;
+        var bingA, bingAWL, bingR;
+        function initialize() {
+            var options = { zoom: 0, position: [49.190791, 16.61165], proxyHost: 'http://srtm.webglearth.com/cgi-bin/corsproxy.fcgi?url=' };
+            earth = new WebGLEarth('earth_div', options);
+
+            // Get your own key from: https://www.bingmapsportal.com/
+            var bingKey = 'Aou8O66ljIQOn3lAvXDNjL_Jrvt1MbMbhZaDwo4dogXjacpjLUG0DiFY2eaeaJye';
+
+            // bingA = earth.initMap(WebGLEarth.Maps.BING, ['Aerial', bingKey]);
+            bingAWL = earth.initMap(WebGLEarth.Maps.BING, ['AerialWithLabels', bingKey]);
+            // bingR = earth.initMap(WebGLEarth.Maps.BING, ['Road', bingKey]);
+
+            earth.setBaseMap(bingAWL);
+            // Start a simple rotation animation
+            var before = null;
+            requestAnimationFrame(function animate(now) {
+                var c = earth.getPosition();
+                var elapsed = before ? now - before : 0;
+                before = now;
+                earth.setCenter([c[0], c[1] + 0.1 * (elapsed / 30)]);
+                requestAnimationFrame(animate);
+            });
+            
+            var markerGeneva = WE.marker([46.206719, 6.078534], '/img/logo-givaudan-yellow.png', 64, 64).addTo(earth);
+            markerGeneva.bindPopup("<b>Welcome to Geneva</b><br /><span style='font-size:10px;color:#999'>Visit us <a href='https://data.globalvision.ch/file/givaudan/GIP/0921/' target='blank'>here</a></span>", { maxWidth: 150, closeButton: true }).openPopup();
+
+            var markerBrazil = WE.marker([-23.534189, -46.749482], '/img/logo-givaudan.png', 64, 64).addTo(earth);
+            markerBrazil.bindPopup("<b>Welcome to Brazil</b><br /><span style='font-size:10px;color:#999'>Visit us <a href='https://data.globalvision.ch/file/givaudan/The_House_of_Givaudan/' target='blank'>here</a></span>", { maxWidth: 150, closeButton: true }).openPopup();
+
+            // var markerCustom = WE.marker([ 10.762622, 106.660172], '/img/logo-givaudan.png', 100, 100).addTo(earth);
+            // markerCustom.bindPopup("<b>Hello there!</b><br>Welcome to Viet Nam.", { maxWidth: 150, closeButton: true }).openPopup();
+        }
+    </script>
 </head>
-<body>
+
+<body class="bg" onload="initialize()">
+    <div>
+        <h1 class="text-center white-color">Demo 3D Globe</h1>
+        <!-- <div class="float-right">
+            <a href="#" onClick="earth.setBaseMap(bingR); return false;">Road</a>
+            <a href="#" onClick="earth.setBaseMap(bingAWL); return false;">Aerial with labels</a>
+            <a href="#" onClick="earth.setBaseMap(bingA); return false;">Aerial</a>
+        </div> -->
+        <div id="earth_div"></div>
+    </div>
 </body>
+
 </html>
