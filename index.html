@@ -7,31 +7,11 @@
 </head>
 
 <body>
-    <div class="header">
-        <h1 style="text-align: center;">Virtual Glazz try-on</h1>
-    </div>
     <div class="container">
-        <form id="formElem">
-            License: <input type="text" name="license" value="123">
-            Picture: <input type="file" name="image" accept="image/*">
-            <input type="submit">
-        </form>
+        <a data-8code="awwj7"></a>
     </div>
 
 </body>
-<script>
-    formElem.onsubmit = async (e) => {
-        e.preventDefault();
-
-        let response = await fetch('https://insight.techqila.com/8088/gender', {
-            method: 'POST',
-            body: new FormData(formElem)
-        });
-
-        let result = await response.json();
-
-        alert(result.message);
-    };
-</script>
 
 </html>
+<script src="//cdn.8thwall.com/web/share/embed8.js"></script>
