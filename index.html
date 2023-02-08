@@ -9,7 +9,7 @@
             // properly decoded qr code
             console.log('Found QR code!', result)
             document.getElementById('result').textContent = result.text
-            window.location.assign(result.text);
+            window.location.replace(result.text);
             //window.open(result.text, '_blank');
           }
       
