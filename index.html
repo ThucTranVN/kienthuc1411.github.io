@@ -1,24 +1,45 @@
 <html>
   <head>
-    <script type="text/javascript" src="https://rawgit.com/schmich/instascan-builds/master/instascan.min.js"></script>
-    <script type="text/javascript">
-      let scanner = new Instascan.Scanner({ video: document.getElementById('preview') });
-      scanner.addListener('scan', function (content) {
-        window.open(content, '_blank');
-        scanner.stop();
-      });
-      Instascan.Camera.getCameras().then(function (cameras) {
-        if (cameras.length > 0) {
-          scanner.start(cameras[0]);
-        } else {
-          console.error('No cameras found.');
-        }
-      }).catch(function (e) {
-        console.error(e);
-      });
-    </script>
+    <script type="text/javascript" src="https://unpkg.com/@zxing/library@latest"></script>
+    <script>
+        const codeReader = new ZXing.BrowserQRCodeReader();
+      
+        codeReader.decodeFromVideoDevice(null, 'webcam-preview', (result, err) => {
+          if (result) {
+            // properly decoded qr code
+            console.log('Found QR code!', result)
+            document.getElementById('result').textContent = result.text
+            window.open(result.text, '_blank');
+          }
+      
+          if (err) {
+            // As long as this error belongs into one of the following categories
+            // the code reader is going to continue as excepted. Any other error
+            // will stop the decoding loop.
+            //
+            // Excepted Exceptions:
+            //
+            //  - NotFoundException
+            //  - ChecksumException
+            //  - FormatException
+      
+            if (err instanceof ZXing.NotFoundException) {
+              console.log('No QR code found.')
+            }
+      
+            if (err instanceof ZXing.ChecksumException) {
+              console.log('A code was found, but it\'s read value was not valid.')
+            }
+      
+            if (err instanceof ZXing.FormatException) {
+              console.log('A code was found, but it was in a invalid format.')
+            }
+          }
+        })
+      </script>
   </head>
   <body>
-    <video id="preview"></video>
+    <video id="webcam-preview"></video>
+    <p id="result"></p>
   </body>
 </html>
